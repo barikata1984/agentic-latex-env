@@ -1,0 +1,33 @@
+name: Build Paper PDF
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Pixi のセットアップ (キャッシュも自動で効く)
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          pixi-version: v0.40.2
+          cache: true
+          run-install: true
+
+      # ビルド実行 (pixi.toml の [tasks] build を参照)
+      - name: Compile PDF
+        run: pixi run build
+
+      # PDFのアップロード
+      - name: Upload PDF Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-paper
+          path: build/*.pdf
+          retention-days: 30

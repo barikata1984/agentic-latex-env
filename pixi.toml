@@ -1,0 +1,22 @@
+[workspace]
+name = "agentic-paper-writing"
+version = "0.1.0"
+description = "Reproducible LaTeX environment with Python for agentic writing"
+authors = ["Atsushi Kuno"]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tasks]
+# システム(apt)の latexmk を使う設定
+# -shell-escape は minted 用に必須
+build = "latexmk -pdf -shell-escape -interaction=nonstopmode -file-line-error -outdir=build main.tex"
+clean = "latexmk -c -outdir=build"
+
+[dependencies]
+python = "3.11.*"
+# --- Python ツール (TeX連携用) ---
+pygments = "*"      # mintedパッケージがこれを利用します
+matplotlib = "*"    # グラフ描画用
+pandas = "*"        # データ処理用
+ipykernel = "*"     # Jupyter Notebook用
+ruff = "*"          # Pythonコード整形

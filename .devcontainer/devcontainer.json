@@ -1,0 +1,47 @@
+{
+    "name": "Agentic LaTeX Env (Pixi)",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+        // args は削除しました（公式イメージが自動処理するため不要）
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "james-yu.latex-workshop",
+                "anthropic.claude-code",
+                "tamasfe.even-better-toml",
+                "ms-python.python",
+                "charliermarsh.ruff"
+            ],
+            "settings": {
+                "latex-workshop.latex.tools": [
+                    {
+                        "name": "pixi-build",
+                        "command": "pixi",
+                        "args": ["run", "build"],
+                        "env": {}
+                    }
+                ],
+                "latex-workshop.latex.recipes": [
+                    {
+                        "name": "Pixi Build",
+                        "tools": ["pixi-build"]
+                    }
+                ],
+                "latex-workshop.latex.outDir": "./build",
+                "claudeCode.environmentVariables": {
+                    "ANTHROPIC_BASE_URL": "http://localhost:11434/v1",
+                    "ANTHROPIC_API_KEY": "ollama",
+                    "ANTHROPIC_AUTH_TOKEN": "dummy"
+                }
+            }
+        }
+    },
+    
+    // 【重要】依存関係のインストール
+    "postCreateCommand": "pixi install",
+    
+    "runArgs": ["--network=host"],
+    "remoteUser": "vscode"
+}
