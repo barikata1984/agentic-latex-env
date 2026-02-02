@@ -12,7 +12,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Pixi のセットアップ (キャッシュも自動で効く)
+      # 【追加】TeXLive をインストールするステップ
+      # ローカルの Dockerfile と同じ環境を CI 上にも作ります
+      - name: Install TeXLive
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-extra \
+            texlive-science \
+            texlive-lang-japanese \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            latexmk \
+            biber
+
+      # Pixi のセットアップ (Python環境用)
       - name: Setup Pixi
         uses: prefix-dev/setup-pixi@v0.8.1
         with:
@@ -20,7 +35,7 @@ jobs:
           cache: true
           run-install: true
 
-      # ビルド実行 (pixi.toml の [tasks] build を参照)
+      # ビルド実行
       - name: Compile PDF
         run: pixi run build
 
